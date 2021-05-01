@@ -12,7 +12,7 @@ jobs:
         fail-fast: false
         max-parallel: 1
         matrix:
-            platform: ["linux/arm64", "linux/amd64", "linux/ppc64le", "linux/arm/v7", "linux/arm/v6"]
+            platform: ["linux/arm64,linux/amd64,linux/ppc64le,linux/arm/v7,linux/arm/v6"]
     steps:
         - name: Check out the repository
           uses: actions/checkout@v2
@@ -27,7 +27,7 @@ jobs:
           with:
             version: latest
         - name: Build action image
-          run: PLATFORM="${{ matrix.platform }}" IMAGE_TAG="docker.io/botsudo/nut-upsd:latest" make docker-build
+          run: ACTION="push" PLATFORM="${{ matrix.platform }}" IMAGE_TAG="docker.io/botsudo/nut-upsd:latest" make docker-build
           env:
             DOCKER_BUILDKIT: 1
 

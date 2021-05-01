@@ -3,10 +3,14 @@ IMAGE_TAG ?= nut-upsd
 .PHONY: update-tags docker-build
 
 docker-build:
-	docker build ./docker \
+	# https://github.com/docker/buildx#building
+	docker buildx build \
+		--tag $(IMAGE_TAG) \
+		--platform linux/amd64,linux/arm64,linux/ppc64le,linux/s390x,linux/386,linux/arm/v7,linux/arm/v6 \
 		--build-arg VCS_REF=`git rev-parse HEAD` \
 		--build-arg BUILD_DATE=`date -u +"%Y-%m-%dT%H:%M:%SZ"` \
-		--tag $(IMAGE_TAG)
+		--load \
+		./docker
 
 update-tags:
 	git checkout main

@@ -8,5 +8,9 @@ jobs:
         steps:
             - name: Checkout repository
               uses: actions/checkout@v2
+            - name: install docker buildx
+              uses: crazy-max/ghaction-docker-buildx@v1
+              with:
+                version: latest
             - name: Build action image
               run: make docker-build

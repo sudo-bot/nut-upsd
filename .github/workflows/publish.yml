@@ -8,10 +8,10 @@ jobs:
   push_to_registry:
     name: Push Docker image to Docker hub
     runs-on: ubuntu-latest
-    fail-fast: false
     strategy:
-            matrix:
-                platform: ["linux/amd64", "linux/arm64", "linux/ppc64le", "linux/arm/v7", "linux/arm/v6"]
+        fail-fast: false
+        matrix:
+            platform: ["linux/amd64", "linux/arm64", "linux/ppc64le", "linux/arm/v7", "linux/arm/v6"]
     steps:
         - name: Check out the repository
           uses: actions/checkout@v2

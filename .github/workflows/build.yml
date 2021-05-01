@@ -8,6 +8,7 @@ jobs:
         strategy:
             fail-fast: false
             matrix:
+                max-parallel: 1
                 # Not all for time waste reasons
                 platform: ["linux/amd64", "linux/arm64"]
         steps:

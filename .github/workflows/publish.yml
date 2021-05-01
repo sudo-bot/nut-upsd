@@ -11,6 +11,7 @@ jobs:
     strategy:
         fail-fast: false
         matrix:
+            max-parallel: 1
             platform: ["linux/amd64", "linux/arm64", "linux/ppc64le", "linux/arm/v7", "linux/arm/v6"]
     steps:
         - name: Check out the repository

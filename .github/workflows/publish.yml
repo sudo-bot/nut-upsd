@@ -1,0 +1,29 @@
+name: Publish Docker image
+on:
+  push:
+    tags:
+       - 'latest'
+
+jobs:
+  push_to_registry:
+    name: Push Docker image to Docker hub
+    runs-on: ubuntu-latest
+    steps:
+        - name: Check out the repository
+          uses: actions/checkout@v2
+        - name: Login to DockerHub
+          uses: docker/login-action@v1
+          with:
+            registry: docker.io
+            username: ${{ secrets.DOCKER_REPOSITORY_LOGIN }}
+            password: ${{ secrets.DOCKER_REPOSITORY_PASSWORD }}
+        - name: Build action image
+          run: IMAGE_TAG="docker.io/botsudo/nut-upsd:latest" make docker-build
+
+        - name: Sign and push docker image
+          uses: sudo-bot/action-docker-sign@latest
+          with:
+            image-ref: "docker.io/botsudo/nut-upsd:latest"
+            private-key-id: "${{ secrets.DOCKER_PRIVATE_KEY_ID }}"
+            private-key: ${{ secrets.DOCKER_PRIVATE_KEY }}
+            private-key-passphrase: ${{ secrets.DOCKER_PRIVATE_KEY_PASSPHRASE }}

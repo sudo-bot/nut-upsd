@@ -73,6 +73,7 @@ RUN set -ex; \
 	; \
 	# cleanup
 	rm -rf /tmp/nut-$NUT_VERSION.tar.gz /tmp/nut-$NUT_VERSION.tar.gz.sha256 /tmp/nut-$NUT_VERSION; \
+	rm -rf /share/man/man5 /share/man/man8; \
 	apk del .build-deps
 
 COPY docker-entrypoint.sh /usr/local/bin/

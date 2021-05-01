@@ -1,6 +1,11 @@
-FROM alpine:3.12
+FROM alpine:3.13
+
+# Metadata params
+ARG VCS_REF
+ARG BUILD_DATE
 
 ENV NUT_VERSION 2.7.4
+ENV NUT_SHA256 "980e82918c52d364605c0703a5dcf01f74ad2ef06e3d365949e43b7d406d25a7"
 
 ENV UPS_NAME="ups"
 ENV UPS_DESC="UPS"
@@ -36,8 +41,10 @@ RUN set -ex; \
 	; \
 	# download and extract
 	cd /tmp; \
-	wget http://www.networkupstools.org/source/2.7/nut-$NUT_VERSION.tar.gz; \
+    printf '%s  nut-2.7.4.tar.gz\n' "$NUT_SHA256" > nut-$NUT_VERSION.tar.gz.sha256; \
+	wget https://www.networkupstools.org/source/2.7/nut-$NUT_VERSION.tar.gz; \
 	tar xfz nut-$NUT_VERSION.tar.gz; \
+    sha256sum -c -w nut-$NUT_VERSION.tar.gz.sha256; \
 	cd nut-$NUT_VERSION \
 	; \
 	# build
@@ -65,7 +72,7 @@ RUN set -ex; \
 	install -d -m 750 -o nut -g nut /var/run/nut \
 	; \
 	# cleanup
-	rm -rf /tmp/nut-$NUT_VERSION.tar.gz /tmp/nut-$NUT_VERSION; \
+	rm -rf /tmp/nut-$NUT_VERSION.tar.gz /tmp/nut-$NUT_VERSION.tar.gz.sha256 /tmp/nut-$NUT_VERSION; \
 	apk del .build-deps
 
 COPY docker-entrypoint.sh /usr/local/bin/

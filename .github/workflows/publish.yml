@@ -20,6 +20,11 @@ jobs:
             registry: docker.io
             username: ${{ secrets.DOCKER_REPOSITORY_LOGIN }}
             password: ${{ secrets.DOCKER_REPOSITORY_PASSWORD }}
+        - name: Install docker buildx
+          uses: docker/setup-buildx-action@v1
+          with:
+            buildx-version: latest
+            qemu-version: latest
         - name: Build action image
           run: PLATFORM="${{ matrix.platform }}" IMAGE_TAG="docker.io/botsudo/nut-upsd:latest" make docker-build
 

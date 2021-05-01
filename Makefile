@@ -11,9 +11,3 @@ docker-build:
 		--build-arg BUILD_DATE=`date -u +"%Y-%m-%dT%H:%M:%SZ"` \
 		--load \
 		./docker
-
-update-tags:
-	git checkout main
-	git tag -s -f -a -m "latest series" latest
-	git checkout -
-	git push origin refs/tags/latest -f

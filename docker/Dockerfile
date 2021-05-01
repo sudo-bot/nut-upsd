@@ -30,12 +30,12 @@ LABEL org.label-schema.vendor="Sudo-Bot" \
 
 RUN set -ex; \
 	# run dependencies
-	apk add --no-cache \
+	apk add --update  --no-cache \
 		openssh-client \
 		libusb-compat \
 	; \
 	# build dependencies
-	apk add --no-cache --virtual .build-deps \
+	apk add --update --no-cache --virtual .build-deps \
 		libusb-compat-dev \
 		build-base \
 	; \

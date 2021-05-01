@@ -5,6 +5,10 @@ on: [push]
 jobs:
     build-action:
         runs-on: ubuntu-latest
+        strategy:
+            matrix:
+                # Not all for time waste reasons
+                platform: ["linux/amd64", "linux/arm64"]
         steps:
             - name: Checkout repository
               uses: actions/checkout@v2
@@ -13,4 +17,4 @@ jobs:
               with:
                 version: latest
             - name: Build action image
-              run: make docker-build
+              run: PLATFORM="${{ matrix.platform }}" make docker-build

@@ -5,6 +5,7 @@ on: [push]
 jobs:
     build-action:
         runs-on: ubuntu-latest
+        fail-fast: false
         strategy:
             matrix:
                 # Not all for time waste reasons
@@ -15,7 +16,8 @@ jobs:
             - name: Install docker buildx
               uses: docker/setup-buildx-action@v1
               with:
-                buildx-version: latest
-                qemu-version: latest
+                version: latest
             - name: Build action image
               run: PLATFORM="${{ matrix.platform }}" make docker-build
+              env:
+                DOCKER_BUILDKIT: 1

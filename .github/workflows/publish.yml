@@ -8,6 +8,7 @@ jobs:
   push_to_registry:
     name: Push Docker image to Docker hub
     runs-on: ubuntu-latest
+    fail-fast: false
     strategy:
             matrix:
                 platform: ["linux/amd64", "linux/arm64", "linux/ppc64le", "linux/arm/v7", "linux/arm/v6"]
@@ -23,10 +24,11 @@ jobs:
         - name: Install docker buildx
           uses: docker/setup-buildx-action@v1
           with:
-            buildx-version: latest
-            qemu-version: latest
+            version: latest
         - name: Build action image
           run: PLATFORM="${{ matrix.platform }}" IMAGE_TAG="docker.io/botsudo/nut-upsd:latest" make docker-build
+          env:
+            DOCKER_BUILDKIT: 1
 
         - name: Sign and push docker image
           uses: sudo-bot/action-docker-sign@latest

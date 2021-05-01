@@ -1,7 +1,5 @@
 FROM alpine:3.12
 
-LABEL maintainer="docker@upshift.fr"
-
 ENV NUT_VERSION 2.7.4
 
 ENV UPS_NAME="ups"
@@ -13,6 +11,17 @@ ENV API_PASSWORD=""
 ENV ADMIN_PASSWORD=""
 
 ENV SHUTDOWN_CMD="echo 'System shutdown not configured!'"
+
+# Metadata
+LABEL org.label-schema.vendor="Sudo-Bot" \
+    org.label-schema.url="https://github.com/sudo-bot/nut-upsd#readme" \
+    org.label-schema.name="gh-deployer container" \
+    org.label-schema.description="UPS daemon" \
+    org.label-schema.version=${NUT_VERSION} \
+    org.label-schema.vcs-url="https://github.com/sudo-bot/nut-upsd.git" \
+    org.label-schema.vcs-ref=${VCS_REF} \
+    org.label-schema.build-date=${BUILD_DATE} \
+    org.label-schema.docker.schema-version="1.0"
 
 RUN set -ex; \
 	# run dependencies
@@ -59,8 +68,8 @@ RUN set -ex; \
 	rm -rf /tmp/nut-$NUT_VERSION.tar.gz /tmp/nut-$NUT_VERSION; \
 	apk del .build-deps
 
-COPY src/docker-entrypoint /usr/local/bin/
-ENTRYPOINT ["docker-entrypoint"]
+COPY docker-entrypoint.sh /usr/local/bin/
+ENTRYPOINT ["docker-entrypoint.sh"]
 
 WORKDIR /var/run/nut
 

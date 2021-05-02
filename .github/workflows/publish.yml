@@ -12,8 +12,12 @@ jobs:
         fail-fast: false
         max-parallel: 1
         matrix:
-            platform: ["linux/arm64", "linux/amd64", "linux/ppc64le", "linux/arm/v7", "linux/arm/v6"]
-            platform-tag: ["arm64", "amd64", "ppc64le", "armv7", "armv6"]
+            include:
+                - { platform: "linux/arm64", platform-tag: "arm64" }
+                - { platform: "linux/amd64", platform-tag: "amd64" }
+                - { platform: "linux/arm/v7", platform-tag: "armv7" }
+                - { platform: "linux/arm/v6", platform-tag: "armv6" }
+                - { platform: "linux/ppc64le", platform-tag: "ppc64le" }
     steps:
         - name: Check out the repository
           uses: actions/checkout@v2

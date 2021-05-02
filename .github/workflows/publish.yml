@@ -13,6 +13,7 @@ jobs:
         max-parallel: 1
         matrix:
             platform: ["linux/arm64", "linux/amd64", "linux/ppc64le", "linux/arm/v7", "linux/arm/v6"]
+            platform-tag: ["arm64", "amd64", "ppc64le", "armv7", "armv6"]
     steps:
         - name: Check out the repository
           uses: actions/checkout@v2
@@ -27,14 +28,14 @@ jobs:
           with:
             version: latest
         - name: Build action image
-          run: PLATFORM="${{ matrix.platform }}" IMAGE_TAG="docker.io/botsudo/nut-upsd:${{ matrix.platform }}-latest" make docker-build
+          run: PLATFORM="${{ matrix.platform }}" IMAGE_TAG="docker.io/botsudo/nut-upsd:${{ matrix.platform-tag }}-latest" make docker-build
           env:
             DOCKER_BUILDKIT: 1
 
         - name: Sign and push docker image
           uses: sudo-bot/action-docker-sign@latest
           with:
-            image-ref: "docker.io/botsudo/nut-upsd:${{ matrix.platform }}-latest"
+            image-ref: "docker.io/botsudo/nut-upsd:${{ matrix.platform-tag }}-latest"
             private-key-id: "${{ secrets.DOCKER_PRIVATE_KEY_ID }}"
             private-key: ${{ secrets.DOCKER_PRIVATE_KEY }}
             private-key-passphrase: ${{ secrets.DOCKER_PRIVATE_KEY_PASSPHRASE }}

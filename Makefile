@@ -3,6 +3,7 @@ IMAGE_TAG ?= nut-upsd
 PLATFORM ?= linux/amd64
 
 ACTION ?= load
+PROGRESS_MODE ?= plain
 
 .PHONY: update-tags docker-build
 
@@ -10,6 +11,7 @@ docker-build:
 	# https://github.com/docker/buildx#building
 	docker buildx build \
 		--tag $(IMAGE_TAG) \
+		--progress $(PROGRESS_MODE) \
 		--platform $(PLATFORM) \
 		--build-arg VCS_REF=`git rev-parse HEAD` \
 		--build-arg BUILD_DATE=`date -u +"%Y-%m-%dT%H:%M:%SZ"` \

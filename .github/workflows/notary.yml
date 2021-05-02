@@ -45,3 +45,4 @@ jobs:
             private-key-passphrase: ${{ secrets.DOCKER_PRIVATE_KEY_PASSPHRASE }}
             private-key-name: ${{ secrets.DOCKER_PRIVATE_KEY_NAME }}
             sign-manifest: true
+            notary-auth: "${{ secrets.DOCKER_REPOSITORY_LOGIN }}:${{ secrets.DOCKER_REPOSITORY_PASSWORD }}"

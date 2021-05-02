@@ -14,7 +14,7 @@ jobs:
           run: |
             export GO111MODULE=on
             go get github.com/theupdateframework/notary
-            go install -tags pkcs11 github.com/theupdateframework/notary/cmd/notary
+            go install -tags pkcs11 github.com/theupdateframework/notary/cmd/notary@latest
             notary --help
         - name: Login to DockerHub
           uses: docker/login-action@v1

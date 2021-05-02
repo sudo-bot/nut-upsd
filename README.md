@@ -8,14 +8,14 @@ This image provides a complete UPS monitoring service (USB driver only).
 
 Start the container:
 
-```console
+```sh
 # docker run \
 	--name nut-upsd \
 	--detach \
 	--publish 3493:3493 \
 	--device /dev/bus/usb/xxx/yyy \
 	--env SHUTDOWN_CMD="my-shutdown-command-from-container" \
-	upshift/nut-upsd
+	botsudo/nut-upsd
 ```
 
 ## Auto configuration via environment variables
@@ -42,25 +42,24 @@ This specifies which program will be monitoring this UPS.
 
 ### UPS_PORT
 
-*Default vaue*: `auto`
+*Default value*: `auto`
 
 This is the serial port where the UPS is connected.
 
 ### API_USER
 
-*Default vaue*: `upsmon`
+*Default value*: `upsmon`
 
 This is the username used for communication between upsmon and upsd processes.
 
 ### API_PASSWORD
 
-*Default vaue*: `secret`
+*Default value*: `secret`
 
 This is the password for the upsmon user.
 
 ### SHUTDOWN_CMD
 
-*Default vaue*: `echo 'System shutdown not configured!'`
+*Default value*: `echo 'System shutdown not configured!'`
 
 This is the command upsmon will run when the system needs to be brought down. The command will be run from inside the container.
-

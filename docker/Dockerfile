@@ -28,6 +28,7 @@ LABEL org.label-schema.vendor="Sudo-Bot" \
     org.label-schema.build-date=${BUILD_DATE} \
     org.label-schema.docker.schema-version="1.0"
 
+# Find similar config in: https://git.alpinelinux.org/aports/tree/testing/nut/APKBUILD?id=17c662d69ebf24fbff2fa065d7544863ada956a5
 RUN set -ex; \
 	# run dependencies
 	apk add --update  --no-cache \
@@ -37,6 +38,10 @@ RUN set -ex; \
 	# build dependencies
 	apk add --update --no-cache --virtual .build-deps \
 		libusb-compat-dev \
+        net-snmp-dev \
+        openssl-dev \
+        nss-dev \
+        neon-dev \
 		build-base \
 	; \
 	# download and extract
@@ -57,6 +62,10 @@ RUN set -ex; \
 		--with-all=no \
 		--with-usb=yes \
 		--datadir=/usr/share/nut \
+        --with-nss \
+ 		--with-openssl \
+        --with-neon \
+        --with-snmp \
 		--with-drvpath=/usr/share/nut \
 		--with-statepath=/var/run/nut \
 		--with-user=nut \

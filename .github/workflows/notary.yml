@@ -24,3 +24,24 @@ jobs:
             password: ${{ secrets.DOCKER_REPOSITORY_PASSWORD }}
         - name: Notary list
           run: NOTARY_AUTH="$(printf "${{ secrets.DOCKER_REPOSITORY_LOGIN }}:${{ secrets.DOCKER_REPOSITORY_PASSWORD }}" | base64 -w0)" notary list docker.io/botsudo/nut-upsd -s https://notary.docker.io
+        - name: Create a manifest
+          run: |
+            DOCKER_CLI_EXPERIMENTAL=enabled docker manifest create docker.io/botsudo/nut-upsd:latest \
+                docker.io/botsudo/nut-upsd:arm64-latest \
+                docker.io/botsudo/nut-upsd:amd64-latest \
+                docker.io/botsudo/nut-upsd:armv7-latest \
+                docker.io/botsudo/nut-upsd:armv6-latest \
+                docker.io/botsudo/nut-upsd:ppc64le-latest \
+                docker.io/botsudo/nut-upsd:s390x-latest \
+                docker.io/botsudo/nut-upsd:386-latest \
+                --amend
+
+        - name: Sign and push the manifest
+          uses: sudo-bot/action-docker-sign@latest
+          with:
+            image-ref: "docker.io/botsudo/nut-upsd:latest"
+            private-key-id: "${{ secrets.DOCKER_PRIVATE_KEY_ID }}"
+            private-key: ${{ secrets.DOCKER_PRIVATE_KEY }}
+            private-key-passphrase: ${{ secrets.DOCKER_PRIVATE_KEY_PASSPHRASE }}
+            private-key-name: ${{ secrets.DOCKER_PRIVATE_KEY_NAME }}
+            sign-manifest: true

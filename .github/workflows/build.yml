@@ -7,7 +7,7 @@ jobs:
         runs-on: ubuntu-latest
         strategy:
             fail-fast: false
-            max-parallel: 1
+            max-parallel: 2
             matrix:
                 # Not all for time waste reasons
                 platform: ["linux/arm64", "linux/amd64"]

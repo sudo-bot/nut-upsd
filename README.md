@@ -60,6 +60,6 @@ This is the password for the upsmon user.
 
 ### SHUTDOWN_CMD
 
-*Default value*: `echo 'System shutdown not configured!'`
+*Default value*: `echo 'System shutdown is not configured!'`
 
 This is the command upsmon will run when the system needs to be brought down. The command will be run from inside the container.

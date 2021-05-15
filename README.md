@@ -46,6 +46,18 @@ This specifies which program will be monitoring this UPS.
 
 This is the serial port where the UPS is connected.
 
+### API_PORT
+
+*Default value*: `3493`
+
+This is the port used by upsd.
+
+### API_ADDRESS
+
+*Default value*: `0.0.0.0`
+
+This is the address used by upsd.
+
 ### API_USER
 
 *Default value*: `upsmon`

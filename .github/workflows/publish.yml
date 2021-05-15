@@ -57,6 +57,8 @@ jobs:
     name: Sign the docker hub manifest
     runs-on: ubuntu-latest
     needs: push_to_registry
+    environment:
+        name: Sign Docker manifest
     steps:
         - uses: actions/setup-go@v2
           with:
@@ -89,9 +91,9 @@ jobs:
           uses: sudo-bot/action-docker-sign@latest
           with:
             image-ref: "docker.io/botsudo/nut-upsd:latest"
+            # Using the repository key to sign it
             private-key-id: "${{ secrets.DOCKER_PRIVATE_KEY_ID }}"
             private-key: ${{ secrets.DOCKER_PRIVATE_KEY }}
             private-key-passphrase: ${{ secrets.DOCKER_PRIVATE_KEY_PASSPHRASE }}
-            private-key-name: ${{ secrets.DOCKER_PRIVATE_KEY_NAME }}
             sign-manifest: true
             notary-auth: "${{ secrets.DOCKER_REPOSITORY_LOGIN }}:${{ secrets.DOCKER_REPOSITORY_PASSWORD }}"

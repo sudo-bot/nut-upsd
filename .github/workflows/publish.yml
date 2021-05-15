@@ -8,6 +8,8 @@ jobs:
   push_to_registry:
     name: Push Docker image to Docker hub
     runs-on: ubuntu-latest
+    environment:
+        name: Build Docker images
     strategy:
         fail-fast: false
         max-parallel: 2

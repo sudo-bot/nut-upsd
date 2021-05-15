@@ -18,3 +18,5 @@ docker-build:
 		--$(ACTION) \
 		./docker
 
+docker-push:
+	docker push $(IMAGE_TAG)

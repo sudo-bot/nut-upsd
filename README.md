@@ -1,6 +1,8 @@
 # Network UPS Tools server
 
-Docker image for Network UPS Tools server.
+![Docker Image Size](https://img.shields.io/docker/image-size/botsudo/nut-upsd)
+
+Docker image for Network UPS Tools server published on [Docker Hub](https://hub.docker.com/r/botsudo/nut-upsd), source on [GitHub](https://github.com/sudo-bot/nut-upsd).
 
 ## Usage
 
@@ -9,13 +11,13 @@ This image provides a complete UPS monitoring service (USB driver only).
 Start the container:
 
 ```sh
-# docker run \
-	--name nut-upsd \
-	--detach \
-	--publish 3493:3493 \
-	--device /dev/bus/usb/xxx/yyy \
-	--env SHUTDOWN_CMD="my-shutdown-command-from-container" \
-	botsudo/nut-upsd
+docker run \
+    --name nut-upsd \
+    --detach \
+    --publish 3493:3493 \
+    --device /dev/bus/usb/xxx/yyy \
+    --env SHUTDOWN_CMD="my-shutdown-command-from-container" \
+    botsudo/nut-upsd
 ```
 
 ## Auto configuration via environment variables

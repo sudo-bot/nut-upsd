@@ -34,6 +34,7 @@ RUN set -ex; \
 	apk add --update  --no-cache \
 		openssh-client \
 		libusb-compat \
+        nss \
 	; \
 	# build dependencies
 	apk add --update --no-cache --virtual .build-deps \

@@ -5,6 +5,7 @@ ARG VCS_REF
 ARG BUILD_DATE
 
 # https://networkupstools.org/download.html
+ENV NUT_VERSION_RANGE="2.8"
 ENV NUT_VERSION="2.8.1"
 ENV NUT_SHA256="7da48ee23b1f0d8d72560bb0af84f5c5ae4dbe35452b84cb49840132e47f099c"
 
@@ -49,7 +50,7 @@ RUN set -ex; \
 	# download and extract
 	cd /tmp; \
     printf '%s  nut-2.8.1.tar.gz\n' "$NUT_SHA256" > nut-$NUT_VERSION.tar.gz.sha256; \
-	wget https://www.networkupstools.org/source/2.7/nut-$NUT_VERSION.tar.gz; \
+	wget https://www.networkupstools.org/source/$NUT_VERSION_RANGE/nut-$NUT_VERSION.tar.gz; \
 	tar xfz nut-$NUT_VERSION.tar.gz; \
     sha256sum -c -w nut-$NUT_VERSION.tar.gz.sha256; \
 	cd nut-$NUT_VERSION \

@@ -1,4 +1,4 @@
-FROM alpine:3.19
+FROM alpine:3.20
 
 # Metadata params
 ARG VCS_REF
@@ -6,8 +6,8 @@ ARG BUILD_DATE
 
 # https://networkupstools.org/download.html
 ENV NUT_VERSION_RANGE="2.8"
-ENV NUT_VERSION="2.8.1"
-ENV NUT_SHA256="7da48ee23b1f0d8d72560bb0af84f5c5ae4dbe35452b84cb49840132e47f099c"
+ENV NUT_VERSION="2.8.2"
+ENV NUT_SHA256="e4b4b0cbe7dd39ba9097be7f7d787bb2fffbe35df64dff53b5fe393d659c597d"
 
 ENV UPS_NAME="ups"
 ENV UPS_DESC="UPS"
@@ -49,7 +49,7 @@ RUN set -ex; \
 	; \
 	# download and extract
 	cd /tmp; \
-    printf '%s  nut-2.8.1.tar.gz\n' "$NUT_SHA256" > nut-$NUT_VERSION.tar.gz.sha256; \
+    printf "%s  nut-${NUT_VERSION}.tar.gz\n" "$NUT_SHA256" > nut-$NUT_VERSION.tar.gz.sha256; \
 	wget https://www.networkupstools.org/source/$NUT_VERSION_RANGE/nut-$NUT_VERSION.tar.gz; \
 	tar xfz nut-$NUT_VERSION.tar.gz; \
     sha256sum -c -w nut-$NUT_VERSION.tar.gz.sha256; \

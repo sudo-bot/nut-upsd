@@ -1,5 +1,8 @@
 name: Build docker image
 
+permissions:
+  contents: read
+
 on: [push]
 
 jobs:
@@ -13,13 +16,13 @@ jobs:
                 platform: ["linux/arm64", "linux/amd64"]
         steps:
             - name: Checkout repository
-              uses: actions/checkout@v3
+              uses: actions/checkout@v4
             # https://github.com/docker/setup-qemu-action
             - name: Set up QEMU
-              uses: docker/setup-qemu-action@v2
+              uses: docker/setup-qemu-action@v3
             # https://github.com/docker/setup-buildx-action
             - name: Set up Docker Buildx
-              uses: docker/setup-buildx-action@v2
+              uses: docker/setup-buildx-action@v3
             - name: Build action image
               run: PLATFORM="${{ matrix.platform }}" make docker-build
               env:

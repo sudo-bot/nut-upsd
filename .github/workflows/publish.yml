@@ -53,6 +53,11 @@ jobs:
                   PLATFORM: "${{ matrix.platform }}"
                   IMAGE_TAG: "docker.io/botsudo/nut-upsd:${{ matrix.platform-tag }}-latest"
                   ACTION: push
+                  # Disable provenance to remove the attestation from the pushed image
+                  # See: https://github.com/docker/buildx/issues/1509
+                  # It makes: docker.io/botsudo/docker-rustpython:<arch>-latest a manifest list
+                  # And docker manifest create does not like that
+                  EXTRA_ARGS: "--provenance=false"
 
     sign-manifest:
         name: Sign the docker hub manifest

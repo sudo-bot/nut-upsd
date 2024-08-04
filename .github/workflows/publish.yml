@@ -3,6 +3,9 @@ name: Publish Docker image
 permissions:
   contents: read
 
+env:
+  IMAGE_NAME: docker.io/botsudo/nut-upsd
+
 on:
     push:
         tags:
@@ -34,25 +37,25 @@ jobs:
         steps:
             - name: Checkout the repository
               uses: actions/checkout@v4
-            - name: Login to DockerHub
-              uses: docker/login-action@v3
-              with:
-                  registry: docker.io
-                  username: ${{ secrets.DOCKER_REPOSITORY_LOGIN }}
-                  password: ${{ secrets.DOCKER_REPOSITORY_PASSWORD }}
             # https://github.com/docker/setup-qemu-action
             - name: Set up QEMU
               uses: docker/setup-qemu-action@v3
             # https://github.com/docker/setup-buildx-action
             - name: Set up Docker Buildx
               uses: docker/setup-buildx-action@v3
+            - name: Login to DockerHub
+              uses: docker/login-action@v3
+              with:
+                  registry: docker.io
+                  username: ${{ secrets.DOCKER_REPOSITORY_LOGIN }}
+                  password: ${{ secrets.DOCKER_REPOSITORY_PASSWORD }}
             - name: Build and push the image
               run: make docker-build
               env:
                   DOCKER_BUILDKIT: 1
                   BUILDKIT_MULTI_PLATFORM: "false"
                   PLATFORM: ${{ matrix.platform }}
-                  IMAGE_TAG: "docker.io/botsudo/nut-upsd:${{ matrix.platform-tag }}-latest"
+                  IMAGE_TAG: "${{ env.IMAGE_NAME }}:${{ matrix.platform-tag }}-latest"
                   ACTION: push
                   # Disable provenance to remove the attestation from the pushed image
                   # See: https://github.com/docker/buildx/issues/1509
@@ -77,20 +80,24 @@ jobs:
               env:
                   DOCKER_CLI_EXPERIMENTAL: enabled
               run: |
-                  docker manifest create docker.io/botsudo/nut-upsd:latest \
-                      docker.io/botsudo/nut-upsd:arm64-latest \
-                      docker.io/botsudo/nut-upsd:amd64-latest \
-                      docker.io/botsudo/nut-upsd:armv7-latest \
-                      docker.io/botsudo/nut-upsd:armv6-latest \
-                      docker.io/botsudo/nut-upsd:ppc64le-latest \
-                      docker.io/botsudo/nut-upsd:s390x-latest \
-                      docker.io/botsudo/nut-upsd:386-latest \
+                  docker manifest create ${{ env.IMAGE_NAME }}:latest \
+                  ${{ env.IMAGE_NAME }}:arm64-latest \
+                  ${{ env.IMAGE_NAME }}:amd64-latest \
+                  ${{ env.IMAGE_NAME }}:armv7-latest \
+                  ${{ env.IMAGE_NAME }}:armv6-latest \
+                  ${{ env.IMAGE_NAME }}:ppc64le-latest \
+                  ${{ env.IMAGE_NAME }}:s390x-latest \
+                  ${{ env.IMAGE_NAME }}:386-latest \
                       --amend
+            - name: Push the manifest
+              run: docker manifest push ${{ env.IMAGE_NAME }}:latest
+            - name: Inspect the manifest
+              run: docker manifest inspect ${{ env.IMAGE_NAME }}:latest
 
             - name: Sign the manifest
               uses: sudo-bot/action-docker-sign@latest
               with:
-                  image-ref: "docker.io/botsudo/nut-upsd:latest"
+                  image-ref: "${{ env.IMAGE_NAME }}:latest"
                   private-key-id: "${{ vars.DOCKER_PRIVATE_KEY_ID }}"
                   private-key: ${{ secrets.DOCKER_PRIVATE_KEY }}
                   private-key-passphrase: ${{ secrets.DOCKER_PRIVATE_KEY_PASSPHRASE }}
@@ -127,14 +134,14 @@ jobs:
                   DOCKER_PASSWORD: ${{ secrets.DOCKER_REPOSITORY_PASSWORD }}
             - name: Remove the temporary images via hub-tool
               run: |
-                  ./hub-tool tag rm --verbose --force docker.io/botsudo/nut-upsd:arm64-latest || true
-                  ./hub-tool tag rm --verbose --force docker.io/botsudo/nut-upsd:amd64-latest || true
-                  ./hub-tool tag rm --verbose --force docker.io/botsudo/nut-upsd:armv7-latest || true
-                  ./hub-tool tag rm --verbose --force docker.io/botsudo/nut-upsd:armv6-latest || true
-                  ./hub-tool tag rm --verbose --force docker.io/botsudo/nut-upsd:ppc64le-latest || true
-                  ./hub-tool tag rm --verbose --force docker.io/botsudo/nut-upsd:s390x-latest || true
-                  ./hub-tool tag rm --verbose --force docker.io/botsudo/nut-upsd:386-latest || true
-                  ./hub-tool tag ls --verbose docker.io/botsudo/nut-upsd
+                  ./hub-tool tag rm --verbose --force ${{ env.IMAGE_NAME }}:arm64-latest || true
+                  ./hub-tool tag rm --verbose --force ${{ env.IMAGE_NAME }}:amd64-latest || true
+                  ./hub-tool tag rm --verbose --force ${{ env.IMAGE_NAME }}:armv7-latest || true
+                  ./hub-tool tag rm --verbose --force ${{ env.IMAGE_NAME }}:armv6-latest || true
+                  ./hub-tool tag rm --verbose --force ${{ env.IMAGE_NAME }}:ppc64le-latest || true
+                  ./hub-tool tag rm --verbose --force ${{ env.IMAGE_NAME }}:s390x-latest || true
+                  ./hub-tool tag rm --verbose --force ${{ env.IMAGE_NAME }}:386-latest || true
+                  ./hub-tool tag ls --verbose ${{ env.IMAGE_NAME }}
             - name: Logout hub-tool
               if: always()
               run: rm ~/.docker/config.json

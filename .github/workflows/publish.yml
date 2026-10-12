@@ -63,8 +63,8 @@ jobs:
                   # And docker manifest create does not like that
                   EXTRA_ARGS: "--provenance=false"
 
-    sign-manifest:
-        name: Sign the docker hub manifest
+    make-manifest:
+        name: Make the docker hub manifest
         runs-on: ubuntu-latest
         needs: push-to-registry
         environment:
@@ -94,19 +94,9 @@ jobs:
             - name: Inspect the manifest
               run: docker manifest inspect ${{ env.IMAGE_NAME }}:latest
 
-            - name: Sign the manifest
-              uses: sudo-bot/action-docker-sign@latest
-              with:
-                  image-ref: "${{ env.IMAGE_NAME }}:latest"
-                  private-key-id: "${{ vars.DOCKER_PRIVATE_KEY_ID }}"
-                  private-key: ${{ secrets.DOCKER_PRIVATE_KEY }}
-                  private-key-passphrase: ${{ secrets.DOCKER_PRIVATE_KEY_PASSPHRASE }}
-                  private-key-name: "${{ vars.DOCKER_PRIVATE_KEY_NAME }}"
-                  sign-manifest: true
-                  notary-auth: "${{ secrets.DOCKER_REPOSITORY_LOGIN }}:${{ secrets.DOCKER_REPOSITORY_PASSWORD }}"
     tags-cleanup:
         runs-on: ubuntu-latest
-        needs: sign-manifest
+        needs: make-manifest
         name: Cleanup build tags
         environment:
             name: Build Docker images
